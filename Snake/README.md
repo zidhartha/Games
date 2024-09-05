@@ -6,7 +6,7 @@
 This is a classic Snake game where you control an addicted qutaiseli kai bichi that grows longer as it smokes cigarettes. 
 ## Screenshots
 
-![Snake Game Screenshot](sandrika.png)(sigareti.png)
+![Snake Game Screenshot](sandrika.png)
 
 ## Installation
 
