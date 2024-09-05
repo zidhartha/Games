@@ -1,22 +1,25 @@
-import javax.imageio.metadata.IIOMetadataFormatImpl;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
 
     static final int SCREEN_WIDTH = 600;
     static final int SCREEN_HEIGHT = 600;
-    static final int UNIT_SIZE = 25;
+    static final int UNIT_SIZE = 30;
     static final int GAME_UNIT = (SCREEN_WIDTH * SCREEN_HEIGHT) / UNIT_SIZE;
-    static final int DELAY = 75;
+    static final int DELAY = 55;
 
-    final int x[] = new int[GAME_UNIT]; //this will hold the x coordinates of the body parts
-    final int y[] = new int[GAME_UNIT];
+    final int[] x = new int[GAME_UNIT]; //this will hold the x coordinates of the body parts
+    final int[] y = new int[GAME_UNIT];
     int bodyParts = 6;
     int applesEaten;
     int appleX;
@@ -25,16 +28,31 @@ public class GamePanel extends JPanel implements ActionListener {
     boolean running = false;
     Timer timer;
     Random random;
+    BufferedImage snakeHead;
+    BufferedImage papirosi;
 
     GamePanel() {
         random = new Random();
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        this.setBackground(Color.GREEN.darker());
+        this.setBackground(Color.BLACK.darker());
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
+        loadImages();
         startGame();
     }
 
+    private void loadImages() {
+        try {
+
+            snakeHead = ImageIO.read(new File("C:/Users/Kiuadmin/Desktop/sandrika.png"));
+
+            papirosi = ImageIO.read(new File("C:/Users/Kiuadmin/Desktop/sigareti.png"));
+
+        } catch (IOException e) {
+            System.out.println("Error loading images. Using fallback colors instead.");
+            e.printStackTrace();
+        }
+    }
 
     public void startGame() {
         newApple();
@@ -67,13 +85,16 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public void draw(Graphics g) {
         if (running) {
-            g.setColor(Color.RED);
-            g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+            if (papirosi != null) {
+                g.drawImage(papirosi, appleX, appleY, UNIT_SIZE, UNIT_SIZE, this);
+            } else {
+                g.setColor(Color.RED);
+                g.fillRect(appleX, appleY, UNIT_SIZE , UNIT_SIZE);
+            }
 
             for (int i = 0; i < bodyParts; i++) {
                 if (i == 0) {
-                    g.setColor(Color.WHITE);
-                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                    g.drawImage(snakeHead, x[i], y[i], UNIT_SIZE, UNIT_SIZE, this);
                 } else {
                     g.setColor(new Color(0, 0, 255));
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
