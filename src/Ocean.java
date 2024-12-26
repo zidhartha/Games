@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Ocean {
     List<Fish> ocean;
+    //sum up three elements from ocean
+
 
     public Ocean(Fish ... fu){
         ocean = new ArrayList<>();
